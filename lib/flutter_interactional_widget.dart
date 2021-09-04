@@ -5,39 +5,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nayuta_sensors/sensors_plus.dart';
 
-// ignore: must_be_immutable
 class InteractionalWidget extends StatefulWidget {
   // 控件宽度
-  double width;
+  final double width;
 
   // 控件高
-  double height;
+  final double height;
 
   // 水平方向最大的旋转角度
-  double maxAngleX;
+  final double maxAngleX;
 
   // 竖直方向最大的旋转角度
-  double maxAngleY;
+  final double maxAngleY;
 
   // 背景层缩放比
-  double? backgroundScale;
+  final double? backgroundScale;
 
   // 中景层缩放比
-  double? middleScale;
+  final double? middleScale;
 
   // 前景层的缩放比
-  double? foregroundScale;
+  final double? foregroundScale;
 
   // 背景层
-  Widget? backgroundWidget;
+  final Widget? backgroundWidget;
 
   // 中景层
-  Widget? middleWidget;
+  final Widget? middleWidget;
 
   // 前景层
-  Widget? foregroundWidget;
+  final Widget? foregroundWidget;
 
-  InteractionalWidget(
+  const InteractionalWidget(
       {Key? key,
       this.backgroundWidget,
       this.middleWidget,
@@ -84,7 +83,7 @@ class _InteractionalWidgetState extends State<InteractionalWidget> {
     super.dispose();
   }
 
-  var lastLocalFocalPoint = Offset(0.1, 0.1);
+  var lastLocalFocalPoint = const Offset(0.1, 0.1);
 
   Offset gyroscopeToOffset(double x, double y) {
     double angleX = x * time * 180 / pi;
@@ -128,21 +127,29 @@ class _InteractionalWidgetState extends State<InteractionalWidget> {
         alignment: Alignment.center,
         children: [
           Positioned(
-              top: backgroundOffset.dy,
-              left: backgroundOffset.dx,
+            child: Transform.translate(
+              offset: Offset(backgroundOffset.dx, backgroundOffset.dy),
               child: Transform.scale(
-                  scale: widget.backgroundScale ?? 1.0,
-                  child: widget.backgroundWidget ?? Row())),
+                scale: widget.backgroundScale ?? 1.0,
+                child: widget.backgroundWidget ?? const SizedBox(),
+              ),
+            ),
+          ),
           Positioned(
-              child: Transform.scale(
-                  scale: widget.middleScale ?? 1.0,
-                  child: widget.middleWidget ?? Row())),
+            child: Transform.scale(
+              scale: widget.middleScale ?? 1.0,
+              child: widget.middleWidget ?? const SizedBox(),
+            ),
+          ),
           Positioned(
-              top: foregroundOffset.dy,
-              left: foregroundOffset.dx,
+            child: Transform.translate(
+              offset: Offset(foregroundOffset.dx, foregroundOffset.dy),
               child: Transform.scale(
-                  scale: widget.foregroundScale ?? 1.0,
-                  child: widget.foregroundWidget ?? Row()))
+                scale: widget.foregroundScale ?? 1.0,
+                child: widget.foregroundWidget ?? const SizedBox(),
+              ),
+            ),
+          ),
         ],
       ),
     );
